@@ -38,7 +38,7 @@ app.get('/usuarios', (_, res) => {
 app.get('/usuarios/:id', (req, res) => {
     const id = Number(req.params.id)
     const usuario = usuarios.find(usuario => usuario.id == id)
-    if (!usuarios.id)
+    if (!usuarios)
         return res.status(404).json({ mensaje: `El usuario con id ${id} no existe` })
     res.status(200).json(usuario)
 })
