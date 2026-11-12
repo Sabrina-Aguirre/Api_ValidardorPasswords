@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 3001
 const usuarios = require('../data/usuarios.json')
-const { reglasAValidar,reglasNoCumplidas } = require('./politicas/reglas')
+const { reglasAValidar, reglasNoCumplidas } = require('./politicas/reglas')
 
 app.use(express.json())
 app.get('/validador', (_, res) => {
@@ -10,7 +10,7 @@ app.get('/validador', (_, res) => {
     const userNoCumple = usuarios
         .filter(u => !reglasAValidar(u))
         .map(({ password, id, ...resto }) => {
-            return {usuarios: resto, errores: reglasNoCumplidas(password)}
+            return { usuarios: resto, errores: reglasNoCumplidas(password) }
         })
     return res.status(200).json(userNoCumple)
 })
@@ -19,10 +19,13 @@ app.post('/usuarios', (req, res) => {
 
     const usuario = req.body
     if (!reglasAValidar(usuario))
-        return res.status(200).json({ mensaje: `La password ${usuario.password} no cumple con las reglas` })
+        return res.status(200).json({
+            mensaje: `La password ${usuario.password} no cumple con las reglas`,
+            errores: reglasNoCumplidas(usuario.password)
+        })
 
-    const id = usuarios.reduce( (acum, each) => acum > each.id ? acum : each.id, 0) + 1
-    const newUsuario = {id, ...usuario}
+    const id = usuarios.reduce((acum, each) => acum > each.id ? acum : each.id, 0) + 1
+    const newUsuario = { id, ...usuario }
     usuarios.push(newUsuario)
     res.status(201).json(newUsuario)
 
@@ -35,8 +38,8 @@ app.get('/usuarios', (_, res) => {
 app.get('/usuarios/:id', (req, res) => {
     const id = Number(req.params.id)
     const usuario = usuarios.find(usuario => usuario.id == id)
-    if(!usuarios.id)
-        return res.status(404).json({mensaje:`El usuario con id ${id} no existe`})
+    if (!usuarios.id)
+        return res.status(404).json({ mensaje: `El usuario con id ${id} no existe` })
     res.status(200).json(usuario)
 })
 app.listen(PORT, () => {
