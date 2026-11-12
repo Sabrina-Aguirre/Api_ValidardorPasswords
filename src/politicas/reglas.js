@@ -29,5 +29,7 @@ const reglas = [
 
 const reglasAValidar = ({ password }) => reglas.every(r => r.fn(password))
 
+const reglasNoCumplidas = (pwd)=> reglas.filter(r => !r.fn(pwd))
 
-module.exports = { reglasAValidar }
+
+module.exports = { reglasAValidar,reglasNoCumplidas }

@@ -2,14 +2,16 @@ const express = require('express')
 const app = express()
 const PORT = process.env.PORT || 3001
 const usuarios = require('../data/usuarios.json')
-const { reglasAValidar } = require('./politicas/reglas')
+const { reglasAValidar,reglasNoCumplidas } = require('./politicas/reglas')
 
 app.use(express.json())
 app.get('/validador', (_, res) => {
 
     const userNoCumple = usuarios
         .filter(u => !reglasAValidar(u))
-        .map(({ password, id, ...resto }) => resto)
+        .map(({ password, id, ...resto }) => {
+            return {usuarios: resto, errores: reglasNoCumplidas(password)}
+        })
     return res.status(200).json(userNoCumple)
 })
 
