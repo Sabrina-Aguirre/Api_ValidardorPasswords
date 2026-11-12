@@ -1,0 +1,23 @@
+info:
+  name: Crear usuario
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:3001/usuarios
+  body:
+    type: json
+    data: |-
+      {
+              "userName": "Juan Carlos",
+              "email": "juan.carlos%@gmail.com",
+              "password": "1car!QBZ"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

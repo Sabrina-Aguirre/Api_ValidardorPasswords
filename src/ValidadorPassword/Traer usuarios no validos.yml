@@ -1,0 +1,23 @@
+info:
+  name: Traer usuarios no validos
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:3001/validador
+  body:
+    type: json
+    data: |-
+      {
+              "userName": "karina",
+              "email": "karina.3%@gmail.com",
+              "password": "1qaz!QAZ"
+          }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
